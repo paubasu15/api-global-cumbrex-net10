@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>CumbrexSaaS.Domain</RootNamespace>
+    <AssemblyName>CumbrexSaaS.Domain</AssemblyName>
+  </PropertyGroup>
+</Project>
