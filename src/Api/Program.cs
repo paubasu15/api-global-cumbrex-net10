@@ -17,6 +17,19 @@ builder.Host.UseSerilog((ctx, lc) => lc
     .WriteTo.Console()
     .WriteTo.Seq(ctx.Configuration["Serilog:SeqUrl"] ?? "http://localhost:5341"));
 
+// Validate JWT secret is not the default placeholder in non-development environments
+var jwtSecret = builder.Configuration["JwtSettings:Secret"];
+if (!builder.Environment.IsDevelopment())
+{
+    const string placeholder = "CHANGE_ME_USE_A_LONG_SECRET_IN_PRODUCTION_AT_LEAST_32_CHARS";
+    if (string.IsNullOrWhiteSpace(jwtSecret) || jwtSecret == placeholder || jwtSecret.Length < 32)
+    {
+        throw new InvalidOperationException(
+            "JwtSettings:Secret must be configured with a cryptographically secure value of at least 32 characters. " +
+            "Use environment variables, Azure Key Vault, or another secure configuration provider.");
+    }
+}
+
 // Infrastructure
 builder.Services.AddInfrastructure(builder.Configuration);
 
